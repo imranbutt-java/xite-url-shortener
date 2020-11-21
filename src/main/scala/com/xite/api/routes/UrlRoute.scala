@@ -1,7 +1,7 @@
 /*
  *
  *                                No Copyright
- *
+ *                      
  */
 
 package com.xite.api.routes
@@ -14,6 +14,7 @@ import com.xite.api.model.ShortUrl
 import org.http4s._
 import org.http4s.circe._
 import org.http4s.dsl._
+import org.http4s.headers.Location
 
 /* imransarwar created on 18/11/2020*/
 class UrlRoute[F[_]: Sync](repo: Repository[F]) extends Http4sDsl[F] {
@@ -24,10 +25,8 @@ class UrlRoute[F[_]: Sync](repo: Repository[F]) extends Http4sDsl[F] {
     case GET -> Root / "shorturl" / id =>
       for {
         rows <- repo.loadShortUrl(id)
-        resp <- ShortUrl.fromDatabase(rows).fold(NotFound())(p => Ok(p))
+        resp <- ShortUrl.fromDatabase(rows).fold(NotFound())(p => PermanentRedirect(Location(Uri(path=s"${p.originalUrl}"))))
       } yield resp
-    // Todo: Having exception on redirect EitherProjectionPartial
-    // TemporaryRedirect(Location(uri"${p.originalUrl}"))
     case req @ POST -> Root / "shorturl" =>
       req
         .as[ShortUrl]

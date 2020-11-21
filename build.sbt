@@ -107,89 +107,11 @@ lazy val library =
 // *****************************************************************************
 
 lazy val settings =
-  commonSettings ++
-    scalafmtSettings
+  commonSettings
 
 val licenseText = s"""
                      |                               No Copyright
                      """.stripMargin
-
-def compilerSettings(sv: String) =
-  CrossVersion.partialVersion(sv) match {
-    case Some((2, 13)) =>
-      Seq(
-        "-deprecation",
-        "-explaintypes",
-        "-feature",
-        "-language:higherKinds",
-        "-unchecked",
-        "-Xcheckinit",
-        "-Xfatal-warnings",
-        "-Xlint:adapted-args",
-        "-Xlint:constant",
-        "-Xlint:delayedinit-select",
-        "-Xlint:doc-detached",
-        "-Xlint:inaccessible",
-        "-Xlint:infer-any",
-        "-Xlint:missing-interpolator",
-        "-Xlint:nullary-override",
-        "-Xlint:nullary-unit",
-        "-Xlint:option-implicit",
-        "-Xlint:package-object-classes",
-        "-Xlint:poly-implicit-overload",
-        "-Xlint:private-shadow",
-        "-Xlint:stars-align",
-        "-Xlint:type-parameter-shadow",
-        "-Ywarn-dead-code",
-        "-Ywarn-extra-implicit",
-        "-Ywarn-numeric-widen",
-        //"-Ywarn-unused:implicits",
-        "-Ywarn-unused:imports",
-        //"-Ywarn-unused:locals",
-        //"-Ywarn-unused:params",
-        "-Ywarn-unused:patvars",
-        "-Ywarn-unused:privates",
-        "-Ywarn-value-discard",
-        "-Ycache-plugin-class-loader:last-modified",
-        "-Ycache-macro-class-loader:last-modified",
-      )
-    case _ =>
-      Seq(
-        "-deprecation",
-        "-encoding", "UTF-8",
-        "-explaintypes",
-        "-feature",
-        "-language:higherKinds",
-        "-target:jvm-1.8",
-        "-unchecked",
-        "-Xcheckinit",
-        "-Xfatal-warnings",
-        "-Xfuture",
-        "-Xlint:adapted-args",
-        "-Xlint:by-name-right-associative",
-        "-Xlint:constant",
-        "-Xlint:delayedinit-select",
-        "-Xlint:doc-detached",
-        "-Xlint:inaccessible",
-        "-Xlint:infer-any",
-        "-Xlint:missing-interpolator",
-        "-Xlint:nullary-override",
-        "-Xlint:nullary-unit",
-        "-Xlint:option-implicit",
-        "-Xlint:package-object-classes",
-        "-Xlint:poly-implicit-overload",
-        "-Xlint:private-shadow",
-        "-Xlint:stars-align",
-        "-Xlint:type-parameter-shadow",
-        "-Xlint:unsound-match",
-        "-Ydelambdafy:method",
-        "-Yno-adapted-args",
-        "-Ypartial-unification",
-        "-Ywarn-numeric-widen",
-        "-Ywarn-unused-import",
-        "-Ywarn-value-discard"
-      )
-  }
 
 lazy val commonSettings =
   Seq(
@@ -201,7 +123,6 @@ lazy val commonSettings =
     startYear := Some(2019),
     addCompilerPlugin("com.olegpy"    %% "better-monadic-for" % "0.3.1"),
     addCompilerPlugin("org.typelevel" %% "kind-projector"     % "0.10.3"),
-    scalacOptions ++= compilerSettings(scalaVersion.value),
     Compile / console / scalacOptions --= Seq("-Xfatal-warnings", "-Ywarn-unused-import"),
     Compile / unmanagedSourceDirectories := Seq((Compile / scalaSource).value),
     Compile / compile / wartremoverWarnings ++= Warts.unsafe,

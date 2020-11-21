@@ -1,7 +1,7 @@
 /*
  *
  *                                No Copyright
- *
+ *                      
  */
 
 package com.xite.api.model
@@ -25,6 +25,6 @@ object ShortUrl {
   def fromDatabase(rows: Seq[(String, String)]): Option[ShortUrl] =
     for {
       (token, orig) <- rows.headOption
-      u = ShortUrl(shortUrl = s"http://localhost:53248/${token}", originalUrl = orig)
+      u = ShortUrl(shortUrl = s"http://127.0.0.1:53248/${token}", originalUrl = orig)
     } yield u
 }
