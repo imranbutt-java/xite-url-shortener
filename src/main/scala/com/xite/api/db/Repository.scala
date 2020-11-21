@@ -7,6 +7,7 @@
 package com.xite.api.db
 
 import com.xite.api.model.ShortUrl
+import fs2.Stream
 
 import scala.collection.immutable.Seq
 
@@ -32,6 +33,13 @@ trait Repository[F[_]] {
     * @return Short url and originial url is returned
     */
   def findOriginalUrl(originalUrl: String): F[Seq[(String, String)]]
+
+  /**
+   * Load all short urls from the database repository.
+   *
+   * @return A stream of database rows which you'll need to combine.
+   */
+  def loadUrls(): Stream[F, (String, String)]
 
   /**
     * Save the given url with short url in the database.

@@ -11,6 +11,7 @@ import com.xite.api.model.ShortUrl
 import com.xite.api.util.UrlHashing
 import doobie.Transactor
 import doobie.implicits._
+import fs2.Stream
 
 import scala.collection.immutable._
 
@@ -43,6 +44,18 @@ final class DoobieRepository[F[_]: Sync](tx: Transactor[F]) extends Repository[F
           WHERE original_url = $originalUrl"""
       .query[(String, String)]
       .to[Seq]
+      .transact(tx)
+
+  /**
+   * Load all products from the database repository.
+   *
+   * @return A stream of database rows which you'll need to combine.
+   */
+  override def loadUrls(): Stream[F, (String, String)] =
+    sql"""SELECT short_url, original_url
+          FROM urls"""
+      .query[(String, String)]
+      .stream
       .transact(tx)
 
   /**
